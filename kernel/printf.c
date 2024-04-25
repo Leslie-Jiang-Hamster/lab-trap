@@ -132,3 +132,20 @@ printfinit(void)
   initlock(&pr.lock, "pr");
   pr.locking = 1;
 }
+
+void backtrace() {
+  uint64 fp = r_fp();
+  uint64 lower_bound = PGROUNDDOWN(fp);
+  uint64 upper_bound = PGROUNDUP(fp);
+
+  printf("backtrace:\n");
+
+  while (1) {
+    uint64 last_breakpoint = *(uint64 *)(fp - 8);
+    uint64 last_fp = *(uint64 *)(fp - 16);
+    if (!(lower_bound <= last_fp && last_fp <= upper_bound))
+      break;
+    printf("%p\n", last_breakpoint);
+    fp = last_fp;
+  }
+}

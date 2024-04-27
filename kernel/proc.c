@@ -143,9 +143,11 @@ found:
 
   // alarms
   p->has_alarm = 0;
+  p->running_handler = 0;
   p->alarm_interval = 0;
   p->ticks_since_last = 0;
   p->handler = (void *)0;
+  p->tmpframe = *(p->trapframe);
 
   return p;
 }

@@ -103,6 +103,7 @@ int sys_sigalarm(int ticks, void (*handler)()) {
     p->has_alarm = 0;
   }
   p->has_alarm = 1;
+  p->running_handler = 0;
   p->alarm_interval = ticks;
   p->ticks_since_last = 0;
   p->handler = handler;
@@ -110,5 +111,8 @@ int sys_sigalarm(int ticks, void (*handler)()) {
 }
 
 int sys_sigreturn() {
+  struct proc *p = myproc();
+  *(p->trapframe) = p->tmpframe;
+  p->running_handler = 0;
   return 0;
 }

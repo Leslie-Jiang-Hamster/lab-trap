@@ -108,7 +108,9 @@ struct proc {
 
   // alarms
   int has_alarm;
+  int running_handler;
   int alarm_interval;
   int ticks_since_last;
   void (*handler)();
+  struct trapframe tmpframe;
 };

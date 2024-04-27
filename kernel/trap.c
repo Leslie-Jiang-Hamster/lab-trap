@@ -78,7 +78,9 @@ usertrap(void)
 
   // give up the CPU if this is a timer interrupt.
   if (which_dev == 2 && p->has_alarm) {
-    if (p->ticks_since_last >= p->alarm_interval) {
+    if (p->ticks_since_last >= p->alarm_interval && p->running_handler == 0) {
+      p->tmpframe = *(p->trapframe);
+      p->running_handler = 1;
       p->ticks_since_last = 0;
       p->trapframe->epc = (uint64)(p->handler);
     }
